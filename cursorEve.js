@@ -3,13 +3,41 @@ AFRAME.registerComponent("cursor-listener", {
       selectedItemId: { default: "", type: "string" },
     },
     init: function () {
+      this.handleClickEvents();
       this.handleMouseEnterEvents();
       this.handleMouseLeaveEvents();
-      this.handleClickEvents();
     },
+
+    handleClickEvents: function () {
+      //Cursor 'click' Events
+      this.el.addEventListener("click", evt => {
+        const placesContainer = document.querySelector("#places-container");
+        const { state } = placesContainer.getAttribute("tour");
+  
+        if (state === "places-list") {
+          const id = this.el.getAttribute("id");
+          const placesId = [
+            "taj-mahal",
+            "budapest",
+            "new-york-city",
+            "eiffel-tower"
+          ];
+          if (placesId.includes(id)) {
+            placesContainer.setAttribute("tour", {
+              state: "view",
+              selectedCard: id
+            });
+          }
+        }
+      });
+    },
+
+
+
+
     handlePlacesListState: function () {
       const id = this.el.getAttribute("id");
-      const placesId = ["taj-mahal","budapest","eiffel-tower","new-york-city"];
+      const placesId = ["taj-mahal", "budapest", "new-york-city", "eiffel-tower"];
       if (placesId.includes(id)) {
         const placeContainer = document.querySelector("#places-container");
         placeContainer.setAttribute("cursor-listener", {
@@ -43,20 +71,4 @@ AFRAME.registerComponent("cursor-listener", {
         }
       });
     },
-    handleClickEvents:function(){
-      this.el,addEventListener("click",evt=>{
-        const placeContainer=document.querySelector("#places-container");
-        const{state}=placeContainer.getAttribute("tour")
-        if(state==="places-list"){
-          const id=this.el.getAttribute("id");
-          const placesId=["taj-mahal","budapest","eiffel-tower","new-york-city"];
-          if(placesId.includes(id)){
-            placeContainer.setAttribute("tour",{
-              state:"view",
-              selectedCard:id
-            });
-          }
-        }
-      });
-    }
   });
